@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+
+  httpd:
+    build:
+      context: ./httpd
+    image: st9f/server-apache:$TAG
+    container_name: server-apache
+    depends_on:
+      - phpfpm
+    volumes:
+      - ./html/:/var/www/html/
+    ports:
+      - 8000:8000
+
+  phpfpm:
+    build:
+      context: ./php
+    image: st9f/server-php:$TAG
+    container_name: server-php
+    expose:
+      - 9000
+    volumes:
+      - ./html/:/var/www/html/
+
+  db:
+    image: mariadb:latest
+    container_name: server-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MARIADB_DATABASE: test_db
+      MARIADB_USER: user
+      MARIADB_PASSWORD: password
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    container_name: server-adminer
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - db:db
