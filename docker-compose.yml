@@ -5,7 +5,7 @@ services:
   httpd:
     build:
       context: ./httpd
-    image: st9f/server-apache:$TAG
+    image: st9f/server-apache:$TAG_HTTPD
     container_name: server-apache
     depends_on:
       - phpfpm
@@ -17,12 +17,14 @@ services:
   phpfpm:
     build:
       context: ./php
-    image: st9f/server-php:$TAG
+    image: st9f/server-php:$TAG_PHP
     container_name: server-php
     expose:
       - 9000
     volumes:
       - ./html/:/var/www/html/
+    links:
+      - db:db
 
   db:
     image: mariadb:latest
