@@ -23,8 +23,14 @@ default
 
 ## modify
 
+this will not modify /volumes
+
 ```bash
-# stop and force a rebuilt if you modify Docker* files
+# stop and rebuilt if you modify docker-compose.yml
+docker-compose down
+docker-compose build && docker-compose up -d
+
+# stop and force a rebuilt if you modify Dockerfiles
 docker-compose down
 docker-compose build --no-cache && docker-compose up -d --force-recreate
 ```
