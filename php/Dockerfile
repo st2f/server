@@ -1,5 +1,7 @@
 FROM php:8.2-fpm-alpine
 
+ARG USER
+
 # non-dev dependencies
 RUN set -eux \
   && apk add --no-cache \
@@ -13,7 +15,7 @@ RUN set -eux \
 RUN set -eux \
   && apk add --no-cache --virtual .build_deps \
   libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev imap-dev \
-  linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
+  linux-headers oniguruma-dev libxslt-dev vips-dev \
   libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev \
   $PHPIZE_DEPS \
   \
@@ -21,15 +23,12 @@ RUN set -eux \
   && docker-php-ext-install \
   mysqli \
   pdo_mysql \
-  pdo_pgsql \
-  pgsql\
   bcmath \
   mbstring \
   xml \
   gd \
   exif \
   zip \
-  soap \
   intl \
   xsl \
   pcntl \
@@ -48,10 +47,6 @@ RUN set -eux \
   # redis
   && pecl install -o -f redis \
   && docker-php-ext-enable redis \
-  \
-  # mongodb
-  && pecl install -o -f mongodb \
-  && docker-php-ext-enable mongodb \
   \
   # ssh2 \
   && pecl install -o -f ssh2 \
@@ -80,17 +75,17 @@ RUN sed -i \
     -e 's/^;listen.group = www-data*/listen.group = app/' \
     /usr/local/etc/php-fpm.d/www.conf
 
-# create user/group 'app' + web/sock/log & set perms
-RUN addgroup -g 1000 app \
-    && adduser -D -H -h /var/www/html -s /sbin/nologin -G app -u 1000 app \
-    && mkdir -p /var/www/html /sock /var/log/php \
-    && chown -R app:app /var/www/html /usr/local/etc /sock /var/log/php
+# create user/group 'app' & set perms
+RUN addgroup -g ${USER} app \
+    && adduser -D -H -h /home/app -G app -u ${USER} app \
+    && mkdir -p /var/www/app /sock /var/log/php \
+    && chown -R app:app /var/www/app /usr/local/etc /sock /var/log/php
 
 # user/group is app
 USER app:app
 
-# go to web dir
-WORKDIR /var/www/html
+# go to app dir
+WORKDIR /var/www/app
 
 # expose port 9000
 EXPOSE 9000

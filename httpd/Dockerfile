@@ -1,5 +1,7 @@
 FROM httpd:2.4-alpine
 
+ARG USER
+
 # replace port & servername
 RUN sed -i \
     -e 's/Listen 80/Listen 8000/' \
@@ -21,16 +23,16 @@ RUN sed -i \
     /usr/local/apache2/conf/httpd.conf
 
 # create user/group 'app' + log dir & set perms
-RUN addgroup -g 1000 app \
-    && adduser -D -H -h /var/www/html -s /sbin/nologin -G app -u 1000 app \
-    && mkdir -p /var/www/html /usr/local/apache2/logs \
-    && chown -R app:app /var/www/html /usr/local/apache2/logs
+RUN addgroup -g ${USER} app \
+    && adduser -D -H -h /home/app -G app -u ${USER} app \
+    && mkdir -p /var/www/app /usr/local/apache2/logs \
+    && chown -R app:app /var/www/app /usr/local/apache2/logs
 
 # user/group is app
 USER app:app
 
 # go to web dir
-WORKDIR /var/www/html
+WORKDIR /var/www/app/public
 
 # expose port 8000
 EXPOSE 8000

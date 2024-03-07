@@ -16,21 +16,10 @@ http://localhost:8000/
 adminer 
 http://localhost:8080/
 
-default 
-- MARIADB_DATABASE: test_db
-- MARIADB_USER: user
-- MARIADB_PASSWORD: password
-
 ## modify
 
-this will not modify /volumes
-
 ```bash
-# stop and rebuilt if you modify docker-compose.yml
-docker-compose down
-docker-compose build && docker-compose up -d
-
-# stop and force a rebuilt if you modify Dockerfiles
+# stop and force a rebuilt if you modify Docker* files
 docker-compose down
 docker-compose build --no-cache && docker-compose up -d --force-recreate
 ```

@@ -5,46 +5,45 @@ services:
   httpd:
     build:
       context: ./httpd
+      args:
+        - USER=${APP_USER}
     image: st9f/server-apache:$TAG_HTTPD
-    container_name: server-apache
+    container_name: appserver-apache
     depends_on:
       - phpfpm
     volumes:
-      - ./html/:/var/www/html/
+      - ./app/public:/var/www/app/public
     ports:
-      - 8000:8000
+      - $APACHE_PORT:8000
 
   phpfpm:
     build:
       context: ./php
+      args:
+        - USER=${APP_USER}
     image: st9f/server-php:$TAG_PHP
-    container_name: server-php
-    expose:
-      - 9000
+    container_name: appserver-php
     volumes:
-      - ./html/:/var/www/html/
-    links:
-      - db:db
+      - ./app/:/var/www/app
 
   db:
     image: mariadb:latest
-    container_name: server-db
+    container_name: appserver-db
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: test
-      MARIADB_DATABASE: test_db
-      MARIADB_USER: user
-      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: $MARIADB_DATABASE
+      MARIADB_USER: $MARIADB_USER
+      MARIADB_PASSWORD: $MARIADB_PASSWORD
     volumes:
       - ./data:/var/lib/mysql
     ports:
-      - 3306:3306
+      - $MARIADB_PORT:3306
 
   adminer:
     image: adminer
-    container_name: server-adminer
+    container_name: appserver-adminer
     restart: always
     ports:
-      - 8080:8080
-    links:
-      - db:db
+      - $ADMINER_PORT:8080
+
