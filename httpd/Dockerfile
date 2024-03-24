@@ -1,6 +1,7 @@
 FROM httpd:2.4-alpine
 
-ARG USER
+ARG USER=1000
+ARG PASSWD=123456
 
 # replace port & servername
 RUN sed -i \
@@ -24,7 +25,7 @@ RUN sed -i \
 
 # create user/group 'app' + log dir & set perms
 RUN addgroup -g ${USER} app \
-    && adduser -D -H -h /home/app -G app -u ${USER} app \
+    && adduser -h /home/app -G app -u ${USER} app;echo "app:${PASSWD}" | chpasswd \
     && mkdir -p /var/www/app /usr/local/apache2/logs \
     && chown -R app:app /var/www/app /usr/local/apache2/logs
 

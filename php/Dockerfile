@@ -1,6 +1,7 @@
 FROM php:8.2-fpm-alpine
 
-ARG USER
+ARG USER=1000
+ARG PASSWD=123456
 
 # non-dev dependencies
 RUN set -eux \
@@ -77,7 +78,7 @@ RUN sed -i \
 
 # create user/group 'app' & set perms
 RUN addgroup -g ${USER} app \
-    && adduser -D -H -h /home/app -G app -u ${USER} app \
+    && adduser -h /home/app -G app -u ${USER} app;echo "app:${PASSWD}" | chpasswd \
     && mkdir -p /var/www/app /sock /var/log/php \
     && chown -R app:app /var/www/app /usr/local/etc /sock /var/log/php
 

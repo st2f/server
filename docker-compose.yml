@@ -7,6 +7,7 @@ services:
       context: ./httpd
       args:
         - USER=${APP_USER}
+        - PASSWD=${APP_PASSWORD}
     image: st9f/server-apache:$TAG_HTTPD
     container_name: appserver-apache
     depends_on:
@@ -21,6 +22,7 @@ services:
       context: ./php
       args:
         - USER=${APP_USER}
+        - PASSWD=${APP_PASSWORD}
     image: st9f/server-php:$TAG_PHP
     container_name: appserver-php
     volumes:

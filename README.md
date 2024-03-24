@@ -19,9 +19,9 @@ http://localhost:8080/
 ## modify
 
 ```bash
-# stop and force a rebuilt if you modify Docker* files
+# stop and rebuilt if you modify Docker* files
 docker-compose down
-docker-compose build --no-cache && docker-compose up -d --force-recreate
+docker-compose build && docker-compose up -d --force-recreate
 ```
 
 
