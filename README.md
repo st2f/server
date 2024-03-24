@@ -21,7 +21,7 @@ http://localhost:8080/
 ```bash
 # stop and rebuilt if you modify Docker* files
 docker-compose down
-docker-compose build && docker-compose up -d --force-recreate
+docker-compose build && docker-compose up -d
 ```
 
 
