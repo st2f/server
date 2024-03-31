@@ -44,7 +44,12 @@ composer create-project symfony/skeleton:"7.0.*" project
 rm -Rf app/public && shopt -s dotglob && cp -Rf project/* app/ && chown -R app:app app/
 ```
 
-composer can be used inside the container and coding on the host volume app/
+![image](https://github.com/st2f/server/assets/66139812/199a7451-9796-4774-929e-19c95942f2bd)
+
+![symfony](https://github.com/st2f/server/assets/66139812/445e4ed4-8639-4d43-b3a8-0aa96a01387f)
+
+composer can be used inside the container and coding can be done on the host volume app/
+
 
 ## modify containers
 
