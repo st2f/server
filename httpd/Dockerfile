@@ -11,6 +11,7 @@ RUN sed -i \
 
 # uncomment proxy & proxy_fcgi modules
 RUN sed -i \
+    -e 's/^#\(LoadModule mod_rewrite modules\/mod_rewrite.so\)/\1/' \
     -e 's/^#\(LoadModule proxy_module modules\/mod_proxy.so\)/\1/' \
     -e 's/^#\(LoadModule proxy_fcgi_module modules\/mod_proxy_fcgi.so\)/\1/' \
     /usr/local/apache2/conf/httpd.conf
