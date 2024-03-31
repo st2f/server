@@ -7,7 +7,7 @@ build a server with apache, php fpm, mariadb, adminer
 mkdir data
 
 # build and start containers
-docker-compose build && docker-compose up -d
+docker compose build && docker compose up -d
 ```
 
 web dir
@@ -20,8 +20,8 @@ http://localhost:8080/
 
 ```bash
 # stop and rebuilt if you modify Docker* files
-docker-compose down
-docker-compose build && docker-compose up -d
+docker compose down
+docker compose build && docker compose up -d
 ```
 
 
