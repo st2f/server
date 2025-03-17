@@ -1,0 +1,56 @@
+#version: '3.8'
+
+services:
+
+  httpd:
+    build:
+      context: ./httpd
+      args:
+        - USER=${APP_USER}
+        - PASSWD=${APP_PASSWORD}
+    image: st9f/server-apache:$TAG_HTTPD
+    container_name: appserver-apache
+    depends_on:
+      - phpfpm
+    volumes:
+      - ./app/public:/var/www/app/public
+    ports:
+      - $APACHE_PORT:8000
+    networks:
+      - web
+
+  phpfpm:
+    build:
+      context: ./php
+      args:
+        - USER=${APP_USER}
+        - PASSWD=${APP_PASSWORD}
+    image: st9f/server-php:$TAG_PHP
+    container_name: appserver-php
+    volumes:
+      - ./app/:/var/www/app
+
+  db:
+    image: mariadb:latest
+    container_name: appserver-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: $MARIADB_DATABASE
+      MARIADB_USER: $MARIADB_USER
+      MARIADB_PASSWORD: $MARIADB_PASSWORD
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - $MARIADB_PORT:3306
+
+  adminer:
+    image: adminer
+    container_name: appserver-adminer
+    restart: always
+    ports:
+      - $ADMINER_PORT:8080
+
+networks:
+  web:
+    external: true
